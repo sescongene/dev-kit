@@ -1,0 +1,45 @@
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: adminadmin
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: adminadmin
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: adminadmin
+      UPLOAD_LIMIT: 128M
+      PHP_UPLOAD_MAX_FILESIZE: 128M
+      PHP_POST_MAX_SIZE: 128M
+    ports:
+      - "8088:80"
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: always
+    volumes:
+      - ./mailpit_data:/data
+    ports:
+      - "8025:8025"   # Web UI
+      - "1025:1025"   # SMTP
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    restart: always
+    environment:
+      MEILI_MASTER_KEY: "your-secure-master-key-change-this-in-production"
+      MEILI_ENV: "development"
+    volumes:
+      - ./meilisearch_data:/meili_data
+    ports:
+      - "7700:7700"
