@@ -33,6 +33,24 @@ services:
       - "8025:8025"   # Web UI
       - "1025:1025"   # SMTP
 
+  redis:
+    image: redis:alpine
+    restart: always
+    volumes:
+      - ./redis_data:/data
+    ports:
+      - "6379:6379"
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    restart: always
+    depends_on:
+      - redis
+    volumes:
+      - ./redisinsight_data:/data
+    ports:
+      - "5540:5540"
+
   meilisearch:
     image: getmeili/meilisearch:latest
     restart: always

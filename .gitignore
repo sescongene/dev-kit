@@ -1,6 +1,7 @@
 # Database data directories
 mysql_data/
 meilisearch_data/
+redis_data/
 
 # Docker
 .docker/
